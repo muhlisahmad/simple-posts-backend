@@ -2,17 +2,17 @@ import { NextFunction, Request, Response } from "express";
 import { asyncErrorHandler } from "../utils/AsyncErrorHandler.js";
 import {
   ArticleParams,
+  ArticleQuery,
   ArticleReqBody,
   ArticleResBody,
   ArticlesResBody,
 } from "../types/articles.js";
-import { PageQuery } from "../types/page.js";
 import ArticleService from "../services/ArticleService.js";
 
 export default class ArticleController {
   static getArticles = asyncErrorHandler(
     async (
-      req: Request<{}, ArticlesResBody, {}, PageQuery>,
+      req: Request<{}, ArticlesResBody, {}, ArticleQuery>,
       res: Response<ArticlesResBody>,
       next: NextFunction
     ) => {

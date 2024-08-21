@@ -1,23 +1,43 @@
 import { prisma } from "../database/prisma.js";
-import { ArticleParams, ArticleReqBody } from "../types/articles.js";
-import { PageQuery } from "../types/page.js";
+import {
+  ArticleParams,
+  ArticleQuery,
+  ArticleReqBody,
+} from "../types/articles.js";
 import ResponseError from "../utils/ResponseError.js";
 import { ArticleValidation } from "../validation/ArticleValidation.js";
 import { Validation } from "../validation/validation.js";
 
 export default class ArticleService {
-  static async get(request: PageQuery) {
+  static async get(request: ArticleQuery) {
     const parsedRequest = Validation.validate(ArticleValidation.GET, request);
-    const articles = await prisma.post.findMany({
-      select: {
-        title: true,
-        content: true,
-        category: true,
-        status: true,
-      },
-      skip: (parsedRequest.page - 1) * parsedRequest.size,
-      take: parsedRequest.size,
-    });
+    const query = parsedRequest.status
+      ? prisma.post.findMany({
+          where: {
+            status: parsedRequest.status,
+          },
+          select: {
+            id: true,
+            title: true,
+            content: true,
+            category: true,
+            status: true,
+          },
+          skip: (parsedRequest.page - 1) * parsedRequest.size,
+          take: parsedRequest.size,
+        })
+      : prisma.post.findMany({
+          select: {
+            id: true,
+            title: true,
+            content: true,
+            category: true,
+            status: true,
+          },
+          skip: (parsedRequest.page - 1) * parsedRequest.size,
+          take: parsedRequest.size,
+        });
+    const articles = await query;
 
     if (articles.length === 0) {
       throw new ResponseError("No articles found", 404);
@@ -45,6 +65,7 @@ export default class ArticleService {
     const newArticle = await prisma.post.create({
       data: parsedRequest,
       select: {
+        id: true,
         title: true,
         content: true,
         category: true,
@@ -63,6 +84,7 @@ export default class ArticleService {
         id: parsedRequest.id,
       },
       select: {
+        id: true,
         title: true,
         content: true,
         category: true,
@@ -108,6 +130,7 @@ export default class ArticleService {
       },
       data: parsedRequest.body,
       select: {
+        id: true,
         title: true,
         content: true,
         category: true,
@@ -126,6 +149,7 @@ export default class ArticleService {
         id: parsedRequest.id,
       },
       select: {
+        id: true,
         title: true,
         content: true,
         category: true,
@@ -145,6 +169,7 @@ export default class ArticleService {
         id: parsedRequest.id,
       },
       select: {
+        id: true,
         title: true,
         content: true,
         category: true,

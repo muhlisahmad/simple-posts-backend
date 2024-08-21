@@ -33,6 +33,18 @@ export class ArticleValidation {
   });
 
   static readonly GET: ZodType = z.object({
+    status: z
+      .enum(["publish", "draft", "thrash"], {
+        errorMap: (issue, ctx) => {
+          if (issue.code === z.ZodIssueCode.invalid_enum_value) {
+            return {
+              message: "Status must be one of 'publish', 'draft', or 'thrash'",
+            };
+          }
+          return { message: ctx.defaultError };
+        },
+      })
+      .optional(),
     page: z.number().min(1).positive(),
     size: z.number().min(1).positive(),
   });

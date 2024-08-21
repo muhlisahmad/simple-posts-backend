@@ -8,9 +8,9 @@
   },
   "scripts": {
     "start:prod": "SET NODE_ENV=production && nodemon --exec \"tsc && node -r dotenv/config ./dist/server.js\"",
-    "start:dev": "SET NODE_ENV=development && nodemon --exec \"node --loader ts-node/esm -r dotenv/config ./src/server.ts\"",
+    "start:dev": "SET NODE_ENV=development && nodemon --exec \"node --no-warnings --loader ts-node/esm -r dotenv/config ./src/server.ts\"",
     "build": "tsc",
-    "start": "node ./dist/server.js"
+    "start": "node ./dist/src/server.js"
   },
   "type": "module",
   "author": "Muhlis Ahmad Abdillah",
