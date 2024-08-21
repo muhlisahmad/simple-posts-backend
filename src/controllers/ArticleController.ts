@@ -73,20 +73,4 @@ export default class ArticleController {
       });
     }
   );
-
-  static deleteArticleById = asyncErrorHandler(
-    async (
-      req: Request<ArticleParams, ArticleResBody>,
-      res: Response<ArticleResBody>,
-      next: NextFunction
-    ) => {
-      const request = { ...req.params };
-      request.id = Number(req.params.id);
-      const response = await ArticleService.delete(request);
-      res.status(200).json({
-        status: "success",
-        ...response,
-      });
-    }
-  );
 }

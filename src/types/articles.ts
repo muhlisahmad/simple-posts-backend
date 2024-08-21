@@ -11,7 +11,7 @@ export interface ArticleQuery extends PageQuery {
 }
 
 export interface ArticleReqBody
-  extends Omit<Post, "created_date" | "updated_date"> {}
+  extends Omit<Post, "id" | "created_date" | "updated_date"> {}
 
 export interface ArticlesResBody extends BaseResponse {
   data: Omit<Post, "created_date" | "updated_date">[];

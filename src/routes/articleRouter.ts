@@ -11,7 +11,6 @@ router
 router
   .route("/:id")
   .get(ArticleController.getArticleById)
-  .patch(ArticleController.updateArticleById)
-  .delete(ArticleController.deleteArticleById);
+  .patch(ArticleController.updateArticleById);
 
 export default router;

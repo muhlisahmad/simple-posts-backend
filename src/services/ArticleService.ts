@@ -132,43 +132,4 @@ export default class ArticleService {
 
     return { data: updatedArticle };
   }
-
-  static async delete(request: ArticleParams) {
-    const parsedRequest = Validation.validate(ArticleValidation.BY_ID, request);
-
-    const article = await prisma.post.findUnique({
-      where: {
-        id: parsedRequest.id,
-      },
-      select: {
-        id: true,
-        title: true,
-        content: true,
-        category: true,
-        status: true,
-      },
-    });
-
-    if (!article) {
-      throw new ResponseError(
-        `Article with ID ${parsedRequest.id} not found`,
-        404
-      );
-    }
-
-    const deletedArticle = await prisma.post.delete({
-      where: {
-        id: parsedRequest.id,
-      },
-      select: {
-        id: true,
-        title: true,
-        content: true,
-        category: true,
-        status: true,
-      },
-    });
-
-    return { data: deletedArticle };
-  }
 }
