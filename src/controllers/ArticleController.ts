@@ -65,6 +65,8 @@ export default class ArticleController {
       next: NextFunction
     ) => {
       const request = { params: { ...req.params }, body: { ...req.body } };
+      console.log(req.body);
+      console.log({ request });
       request.params.id = Number(req.params.id);
       const response = await ArticleService.update(request);
       res.status(200).json({
