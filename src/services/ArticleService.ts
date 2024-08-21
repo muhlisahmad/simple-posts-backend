@@ -15,7 +15,7 @@ export default class ArticleService {
         category: true,
         status: true,
       },
-      skip: parsedRequest.page,
+      skip: (parsedRequest.page - 1) * parsedRequest.size,
       take: parsedRequest.size,
     });
 
@@ -23,7 +23,8 @@ export default class ArticleService {
       throw new ResponseError("No articles found", 404);
     }
 
-    const total_page: number = Math.ceil(articles.length / parsedRequest.size);
+    const totalArticle: number = await prisma.post.count();
+    const total_page: number = Math.ceil(totalArticle / parsedRequest.size);
 
     return {
       data: articles,

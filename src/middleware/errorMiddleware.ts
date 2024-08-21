@@ -32,9 +32,9 @@ const handleErrors = (error: Error, res: Response, isDev: boolean) => {
 
 export const globalErrorMiddleware = (
   error: Error,
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  handleErrors(error, res, process.env.NODE_ENV === "development");
+  handleErrors(error, res, process.env.NODE_ENV?.trim() === "development");
 };
