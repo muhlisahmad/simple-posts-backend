@@ -11,39 +11,30 @@ import { Validation } from "../validation/validation.js";
 export default class ArticleService {
   static async get(request: ArticleQuery) {
     const parsedRequest = Validation.validate(ArticleValidation.GET, request);
-    const query = parsedRequest.status
-      ? prisma.post.findMany({
-          where: {
-            status: parsedRequest.status,
-          },
-          select: {
-            id: true,
-            title: true,
-            content: true,
-            category: true,
-            status: true,
-          },
-          skip: (parsedRequest.page - 1) * parsedRequest.size,
-          take: parsedRequest.size,
-        })
-      : prisma.post.findMany({
-          select: {
-            id: true,
-            title: true,
-            content: true,
-            category: true,
-            status: true,
-          },
-          skip: (parsedRequest.page - 1) * parsedRequest.size,
-          take: parsedRequest.size,
-        });
-    const articles = await query;
+
+    const whereClause = parsedRequest.status
+      ? { status: parsedRequest.status }
+      : {};
+    const articles = await prisma.post.findMany({
+      where: whereClause,
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        category: true,
+        status: true,
+      },
+      skip: (parsedRequest.page - 1) * parsedRequest.size,
+      take: parsedRequest.size,
+    });
 
     if (articles.length === 0) {
       throw new ResponseError("No articles found", 404);
     }
 
-    const totalArticle: number = await prisma.post.count();
+    const totalArticle: number = await prisma.post.count({
+      where: whereClause,
+    });
     const total_page: number = Math.ceil(totalArticle / parsedRequest.size);
 
     return {
@@ -51,6 +42,7 @@ export default class ArticleService {
       paging: {
         page: parsedRequest.page,
         size: parsedRequest.size,
+        total_data: totalArticle,
         total_page,
       },
     };

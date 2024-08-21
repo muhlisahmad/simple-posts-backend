@@ -4,5 +4,6 @@ export interface PageQuery {
 }
 
 export interface Paging extends PageQuery {
+  total_data: number;
   total_page: number;
 }
